@@ -7,14 +7,14 @@ type Script = {
   content: string;
 }
 
-function VitePluginAddScripts (scripts: Script[]): Plugin {
+export default function VitePluginAddScripts (scripts: Script[]): Plugin {
   return {
     name: 'vite-plugin-add-scripts',
     apply: 'build',
     enforce: 'pre',
     async transformIndexHtml (html: string) {
-      const headScripts = []
-      const bodyScripts = []
+      const headScripts: string[] = []
+      const bodyScripts: string[] = []
 
       // If empty array, return
       if (scripts.length === 0) {
@@ -25,11 +25,11 @@ function VitePluginAddScripts (scripts: Script[]): Plugin {
       // should be added to the head or the body.
       scripts.forEach(script => {
         if (!positions.includes(script.position)) {
-          this.error(`"script.position: ${script.position}" is not a valid position. Should be one of [${positions.join(', ')}]`)
+          console.error(`"script.position: ${script.position}" is not a valid position. Should be one of [${positions.join(', ')}]`)
         }
 
         if (!!script.content) {
-          this.error(`"script.content" can't be empty`)
+          console.error(`"script.content" can't be empty`)
         }
 
         // Add script to head/body array
@@ -51,5 +51,3 @@ function VitePluginAddScripts (scripts: Script[]): Plugin {
     },
   }
 }
-
-export default VitePluginAddScripts
