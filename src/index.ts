@@ -28,7 +28,7 @@ export default function VitePluginAddScripts (scripts: Script[]): Plugin {
           console.error(`"script.position: ${script.position}" is not a valid position. Should be one of [${positions.join(', ')}]`)
         }
 
-        if (!!script.content) {
+        if (script.content.length === 0) {
           console.error(`"script.content" can't be empty`)
         }
 
@@ -37,14 +37,14 @@ export default function VitePluginAddScripts (scripts: Script[]): Plugin {
       })
 
       // Add all scripts
-      html.replace(
+      html = html.replace(
         /<\/head>/,
-        `${headScripts.join('\n')}</head>`
+        `${headScripts.join('\n')}\n</head>`
       )
 
-      html.replace(
+      html = html.replace(
         /<\/body>/,
-        `${bodyScripts.join('\n')}</body>`
+        `${bodyScripts.join('\n')}\n</body>`
       )
 
       return html
