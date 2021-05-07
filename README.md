@@ -3,7 +3,7 @@ A Vite plugin to add custom scripts to the index.html file
 
 ## Installation
 ```
-npm install vite-plugin-add-scripts
+npm install vite-plugin-add-scripts --save-dev
 ```
 
 ## Usage
