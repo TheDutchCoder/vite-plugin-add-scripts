@@ -21,8 +21,14 @@ export default {
     {
       ...ViteAddScripts([
         {
-          position: 'head',
+          position: 'body',
+          sort: 2,
           content: '<script>window.foo = {}</script>'
+        },
+        {
+          position: 'body',
+          sort: 1,
+          content: '<script>window.bar = {}</script>'
         }
       ]),
       apply: 'build',
@@ -33,7 +39,7 @@ export default {
 
 ## Options
 You can use the `position` option to add the script to either the head or the
-body section of the index.html file
+body section of the index.html file. By default `'head'` will be assumed.
 
 The `content` option is the actual content that gets written to the file.
 Normally it would be a stringified version of the script tags and their
@@ -46,12 +52,10 @@ as well.
 ```js
 ...ViteAddScripts([
   {
-    position: 'head',
     sort: 3,
     content: '<script>window.foo = {}</script>'
   },
   {
-    position: 'head',
     sort: -2,
     content: '<script>window.bar = {}</script>'
   },
