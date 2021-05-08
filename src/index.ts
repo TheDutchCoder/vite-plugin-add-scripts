@@ -22,8 +22,8 @@ const VitePluginAddScripts = (scripts: Script[]): Plugin => {
       }
 
       // Filter scripts by their position.
-      const headScripts = filterByPosition(scripts, 'head')
-      const bodyScripts = filterByPosition(scripts, 'body')
+      const headScripts = filterByPosition(scripts, 'head').map(script => script.content)
+      const bodyScripts = filterByPosition(scripts, 'body').map(script => script.content)
 
       // Append the scripts to the HTML.
       html = html.replace(
