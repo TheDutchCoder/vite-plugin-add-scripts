@@ -6,7 +6,7 @@ export const positions = ['head', 'body'] as const
 export type Position = typeof positions[number];
 
 export type Script = {
-  position: Position;
+  position?: Position;
   content: string;
   sort?: number,
 }
