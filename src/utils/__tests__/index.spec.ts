@@ -59,8 +59,8 @@ describe('filterByPosition', () => {
       { position: 'head', content: '1' },
       { position: 'body', content: '2' },
       { position: 'body', content: '3' },
-      { position: 'head', content: '4' },
-      { position: 'head', content: '5' },
+      { content: '4' },
+      { content: '5' },
     ]
 
     const filteredHeadItems: Script[] = [
