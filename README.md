@@ -1,6 +1,8 @@
 # vite-plugin-add-scripts
 A Vite plugin to add custom scripts to the index.html file
 
+## :warning: This project is still experimental :warning:
+
 ## Installation
 ```
 npm install vite-plugin-add-scripts --save-dev
@@ -41,7 +43,7 @@ contents.
 ...ViteAddScripts([
   {
     position: 'body', // or 'head'
-    content: '<sciprt>window.foo = {}</script>'
+    content: '<script>window.foo = {}</script>'
   }
 ]),
 ```
