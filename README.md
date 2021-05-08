@@ -39,11 +39,39 @@ The `content` option is the actual content that gets written to the file.
 Normally it would be a stringified version of the script tags and their
 contents.
 
+The `sort` option can be used to determine the order the scripts get appended.
+This defaults to `0` and higher values appear later. Negative avlues are allowed
+as well.
+
 ```js
 ...ViteAddScripts([
   {
-    position: 'body', // or 'head'
+    position: 'head',
+    sort: 3,
     content: '<script>window.foo = {}</script>'
+  },
+  {
+    position: 'head',
+    sort: -2,
+    content: '<script>window.bar = {}</script>'
+  },
+  {
+    position: 'body',
+    content: '<script>window.baz = {}</script>'
   }
 ]),
+```
+
+Output:
+```html
+<!DOCTYPE html>
+<html>
+  <head>
+    <script>window.bar = {}</script>
+    <script>window.foo = {}</script>
+  </head>
+  <body>
+    <script>window.baz = {}</script>
+  </body>
+</html>
 ```
