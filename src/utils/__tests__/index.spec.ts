@@ -1,4 +1,4 @@
-import { hasErrors, filterByPosition } from '../index'
+import { hasErrors, filterByPosition, sortScripts } from '../index'
 import type { Script } from '../../index'
 
 describe('hasErrors', () => {
@@ -82,5 +82,30 @@ describe('filterByPosition', () => {
     
     expect(bodyResult.length).toBe(2)
     expect(bodyResult).toEqual(filteredBodyItems)
+  })
+})
+
+describe('sortScripts', () => {
+  it('sorts scripts by their sort key', () => {
+    const items: Script[] = [
+      { position: 'head', content: '1', sort: 5 },
+      { position: 'head', content: '2', sort: 2 },
+      { position: 'head', content: '3' },
+      { position: 'head', content: '4', sort: -1 },
+      { position: 'head', content: '5', sort: 1 },
+    ]
+
+    const sortedItems: Script[] = [
+      { position: 'head', content: '4', sort: -1 },
+      { position: 'head', content: '3', sort: 0 },
+      { position: 'head', content: '5', sort: 1 },
+      { position: 'head', content: '2', sort: 2 },
+      { position: 'head', content: '1', sort: 5 },
+    ]
+
+    const result = sortScripts(items)
+
+    expect(result.length).toBe(5)
+    expect(result).toEqual(sortedItems)
   })
 })

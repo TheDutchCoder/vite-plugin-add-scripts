@@ -1,5 +1,5 @@
 import type { Plugin } from 'vite'
-import { hasErrors, filterByPosition } from './utils'
+import { hasErrors, filterByPosition, sortScripts } from './utils'
 
 export const positions = ['head', 'body'] as const
 
@@ -8,6 +8,7 @@ export type Position = typeof positions[number];
 export type Script = {
   position: Position;
   content: string;
+  sort?: number,
 }
 
 const VitePluginAddScripts = (scripts: Script[]): Plugin => {
@@ -22,18 +23,22 @@ const VitePluginAddScripts = (scripts: Script[]): Plugin => {
       }
 
       // Filter scripts by their position.
-      const headScripts = filterByPosition(scripts, 'head').map(script => script.content)
-      const bodyScripts = filterByPosition(scripts, 'body').map(script => script.content)
+      let headScripts = filterByPosition(scripts, 'head')
+      let bodyScripts = filterByPosition(scripts, 'body')
+
+      // Sort scripts by their sort key.
+      headScripts = sortScripts(headScripts)
+      bodyScripts = sortScripts(bodyScripts)
 
       // Append the scripts to the HTML.
       html = html.replace(
         /<\/head>/,
-        `${headScripts.join('\n')}\n</head>`
+        `${headScripts.map(script => script.content).join('\n')}\n</head>`
       )
 
       html = html.replace(
         /<\/body>/,
-        `${bodyScripts.join('\n')}\n</body>`
+        `${bodyScripts.map(script => script.content).join('\n')}\n</body>`
       )
 
       return html
