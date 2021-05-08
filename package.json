@@ -14,7 +14,8 @@
     "require": "./dist/index.js"
   },
   "scripts": {
-    "test": "npm run test:unit && tsup src/index.ts --format cjs,esm --dts",
+    "build": "tsup src/index.ts --format cjs,esm --dts",
+    "test": "npm run test:unit && npm run build",
     "test:unit": "jest",
     "test:unit:watch": "jest --watch"
   },
