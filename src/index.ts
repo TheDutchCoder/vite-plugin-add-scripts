@@ -1,5 +1,5 @@
 import type { Plugin } from 'vite'
-import { hasErrors, filterByPosition, sortScripts } from './utils'
+import { hasErrors, filterByPosition, filterByPrepend, sortScripts } from './utils'
 
 export const positions = ['head', 'body'] as const
 
@@ -7,6 +7,7 @@ export type Position = typeof positions[number];
 
 export type Script = {
   position?: Position;
+  prepend?: Boolean;
   content: string;
   sort?: number,
 }
@@ -30,15 +31,32 @@ const VitePluginAddScripts = (scripts: Script[]): Plugin => {
       headScripts = sortScripts(headScripts)
       bodyScripts = sortScripts(bodyScripts)
 
+      // Sort by prepend/append.
+      const headPrependScripts = filterByPrepend(headScripts, true)
+      const headAppendScripts = filterByPrepend(headScripts, false)
+
+      const bodyPrependScripts = filterByPrepend(bodyScripts, true)
+      const bodyAppendScripts = filterByPrepend(bodyScripts, false)
+
       // Append the scripts to the HTML.
       html = html.replace(
+        /<head>/,
+        `<head>\n${headPrependScripts.map(script => script.content).join('\n')}`
+      )
+
+      html = html.replace(
         /<\/head>/,
-        `${headScripts.map(script => script.content).join('\n')}\n</head>`
+        `${headAppendScripts.map(script => script.content).join('\n')}\n</head>`
+      )
+
+      html = html.replace(
+        /<body>/,
+        `<body>\n${bodyPrependScripts.map(script => script.content).join('\n')}`
       )
 
       html = html.replace(
         /<\/body>/,
-        `${bodyScripts.map(script => script.content).join('\n')}\n</body>`
+        `${bodyAppendScripts.map(script => script.content).join('\n')}\n</body>`
       )
 
       return html

@@ -19,6 +19,16 @@ export const filterByPosition = (scripts: Script[], position: Position): Script[
   })
 }
 
+export const filterByPrepend = (scripts: Script[], prepend: Boolean): Script[] => {
+  return scripts.filter(script => {
+    if (!script.prepend) {
+      script.prepend = false
+    }
+
+    return script.prepend === prepend
+  })
+}
+
 export const sortScripts = (scripts: Script[]): Script[] => {
   return scripts.sort((first, second) => {
     if (!first.sort) {

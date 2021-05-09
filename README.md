@@ -38,16 +38,43 @@ export default {
 ```
 
 ## Options
-You can use the `position` option to add the script to either the head or the
-body section of the index.html file. By default `'head'` will be assumed.
+This plugin provides a couple of options that can be configured. Only the
+`content` option is required.
 
+### Position
+```js
+value: 'head' | 'body'
+optional
+default: 'head'
+```
+You can use the `position` option to add the script to either the head or the
+body section of the index.html file.
+
+### Content
+```js
+value: string
+required
+```
 The `content` option is the actual content that gets written to the file.
 Normally it would be a stringified version of the script tags and their
 contents.
 
-The `sort` option can be used to determine the order the scripts get appended.
+### Sort
+```js
+value: number
+default: 0
+```
+The `sort` option can be used to determine the order the scripts get added.
 This defaults to `0` and higher values appear later. Negative avlues are allowed
 as well.
+
+### Prepend
+```js
+value: boolean
+default: false
+```
+The `prepend` option adds scripts directly after the `<head>` or `<body>` tag.
+Scripts are appended by default.
 
 ```js
 ...ViteAddScripts([
@@ -56,13 +83,25 @@ as well.
     content: '<script>window.foo = {}</script>'
   },
   {
+    prepend: true,
     sort: -2,
     content: '<script>window.bar = {}</script>'
   },
   {
     position: 'body',
     content: '<script>window.baz = {}</script>'
-  }
+  },
+  {
+    position: 'body',
+    prepend: true,
+    content: '<script>window.this = {}</script>'
+  },
+  {
+    position: 'body',
+    prepend: true,
+    sort: -1,
+    content: '<script>window.that = {}</script>'
+  },
 ]),
 ```
 
@@ -72,9 +111,13 @@ Output:
 <html>
   <head>
     <script>window.bar = {}</script>
+    <title>Title</title>
     <script>window.foo = {}</script>
   </head>
   <body>
+    <script>window.that = {}</script>
+    <script>window.this = {}</script>
+    <p>content</p>
     <script>window.baz = {}</script>
   </body>
 </html>
