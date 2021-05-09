@@ -1,4 +1,4 @@
-import { hasErrors, filterByPosition, sortScripts } from '../index'
+import { hasErrors, filterByPosition, filterByPrepend, sortScripts } from '../index'
 import type { Script } from '../../index'
 
 describe('hasErrors', () => {
@@ -82,6 +82,38 @@ describe('filterByPosition', () => {
     
     expect(bodyResult.length).toBe(2)
     expect(bodyResult).toEqual(filteredBodyItems)
+  })
+})
+
+describe('filterByPrepend', () => {
+  it('filters scripts by their position', () => {
+    const items: Script[] = [
+      { position: 'head', prepend: true, content: '1' },
+      { position: 'head', content: '2' },
+      { position: 'head', content: '3' },
+      { position: 'head', prepend: true, content: '4' },
+      { position: 'head', content: '5' },
+    ]
+
+    const filteredPrependItems: Script[] = [
+      { position: 'head', prepend: true, content: '1' },
+      { position: 'head', prepend: true, content: '4' },
+    ]
+
+    const filteredAppendItems: Script[] = [
+      { position: 'head', prepend: false, content: '2' },
+      { position: 'head', prepend: false, content: '3' },
+      { position: 'head', prepend: false, content: '5' },
+    ]
+
+    const headPrependResult = filterByPrepend(items, true)
+    const headAppendResult = filterByPrepend(items, false)
+
+    expect(headPrependResult.length).toBe(2)
+    expect(headPrependResult).toEqual(filteredPrependItems)
+
+    expect(headAppendResult.length).toBe(3)
+    expect(headAppendResult).toEqual(filteredAppendItems)
   })
 })
 
